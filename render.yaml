@@ -1,0 +1,31 @@
+# Render Blueprint for Griddle
+# This file allows one-click deployment of both frontend and backend
+
+services:
+  # Backend Service
+  - type: web
+    name: griddle-backend
+    env: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: MONGODB_URI
+        sync: false  # Add this manually in Render dashboard
+      - key: CLIENT_URL
+        sync: false  # Add your frontend URL after deploying frontend
+
+  # Frontend Service
+  - type: web
+    name: griddle-frontend
+    env: static
+    rootDir: client
+    buildCommand: npm install && npm run build
+    staticPublishPath: build
+    envVars:
+      - key: REACT_APP_SOCKET_URL
+        sync: false  # Add your backend URL after deploying backend
